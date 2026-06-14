@@ -169,6 +169,7 @@ void dfs(Node* start)
 
     push(&stack, start);
     addToHashSet(visited, start);
+    visited->size++;
     printf("%d ", start->value);
 
     while (!isStackEmpty(stack))
@@ -182,7 +183,9 @@ void dfs(Node* start)
                 push(&stack, currentNode); // Push current node back to stack to continue after exploring nextNode
                 push(&stack, nextNode);
                 addToHashSet(visited, nextNode);
+                visited->size++;
                 printf("%d ", nextNode->value);
+                break; // Break to explore nextNode first
             }
         }
     }
