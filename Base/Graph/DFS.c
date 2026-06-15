@@ -122,8 +122,10 @@ void addToHashSet(HashSet* set, Node* node)
 {
     int index = node->value % set->capacity;
     HashNode* newNode = createHashNode(node);
+    newNode->node = node;
     newNode->next = set->table[index];
     set->table[index] = newNode;
+    set->size++;
 }
 
 bool containsInHashSet(HashSet* set, Node* node)
@@ -168,8 +170,7 @@ void dfs(Node* start)
     stackNode* stack = NULL;
 
     push(&stack, start);
-    addToHashSet(visited, start);
-    visited->size++;
+    addToHashSet(visited, start);  
     printf("%d ", start->value);
 
     while (!isStackEmpty(stack))
@@ -183,7 +184,6 @@ void dfs(Node* start)
                 push(&stack, currentNode); // Push current node back to stack to continue after exploring nextNode
                 push(&stack, nextNode);
                 addToHashSet(visited, nextNode);
-                visited->size++;
                 printf("%d ", nextNode->value);
                 break; // Break to explore nextNode first
             }
@@ -194,8 +194,44 @@ void dfs(Node* start)
     freeHashSet(visited);
 }
 
+int main()
+{
+    // Example usage
+    Node* node1 = createNode(1);
+    Node* node2 = createNode(2);
+    Node* node3 = createNode(3);
+    Node* node4 = createNode(4);
+
+    node1->nexts = (Node**)malloc(sizeof(Node*) * 2);
+    node1->nexts[0] = node2;
+    node1->nexts[1] = node3;
+    node1->nextsSize = 2;
+
+    node2->nexts = (Node**)malloc(sizeof(Node*) * 1);
+    node2->nexts[0] = node4;
+    node2->nextsSize = 1;
+
+    dfs(node1);
+
+    // Free allocated memory for nodes and their nexts
+    free(node1->nexts);
+    free(node2->nexts);
+    free(node1);
+    free(node2);
+    free(node3);
+    free(node4);    
+
+    return 0;
+}
+
 /*
  * xwy 伪代码
+
+bool isEmptyStack(stackNode* top, stackNode* bottom)
+{
+    return top == bottom;
+}
+
 void dfs(Node* start)
 {
 	if(start == NULL)

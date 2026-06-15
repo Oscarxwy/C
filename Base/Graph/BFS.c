@@ -92,14 +92,25 @@ unsigned int hashFunction(int value, int capacity)
     return value % capacity;
 }
 
-HashNode** createHashTable(int capacity)
+HashNode* createHashNode(Node* node)
 {
-    HashNode** hashTable = (HashNode**)malloc(sizeof(HashNode*) * capacity);
+    HashNode* hNode = (HashNode*)malloc(sizeof(HashNode));
+    hNode->node = node;
+    hNode->next = NULL;
+    return hNode;
+}
+
+HashSet* createHashSet(int capacity)
+{
+    HashSet* set = (HashSet*)malloc(sizeof(HashSet));
+    set->capacity = capacity;
+    set->size = 0;
+    set->table = (HashNode**)malloc(sizeof(HashNode*) * capacity);
     for (int i = 0; i < capacity; i++)
     {
-        hashTable[i] = NULL;
+        set->table[i] = NULL;
     }
-    return hashTable;
+    return set;
 }
 
 void addToHashSet(HashSet* set, Node* node)
@@ -109,6 +120,7 @@ void addToHashSet(HashSet* set, Node* node)
     newNode->node = node;
     newNode->next = set->table[index];
     set->table[index] = newNode;
+    set->size++;
 }
 
 int containsInHashSet(HashSet* set, Node* node)
@@ -175,11 +187,7 @@ void bfs(Node* start)
         return;
     }
     
-    HashSet* visited = (HashSet*)malloc(sizeof(HashSet));
-    visited->capacity = 1000; // Arbitrary capacity for hash set
-    visited->size = 0;
-    visited->table = createHashTable(visited->capacity);
-
+    HashSet* visited = createHashSet(1000); // Arbitrary capacity for hash set
     Node** queue = createQueue(1000); // Arbitrary capacity for queue
     int front = 0;
     int rear = 0;
@@ -229,9 +237,10 @@ int main()
     // Free allocated memory for nodes and their nexts
     free(node1->nexts);
     free(node2->nexts);
+    free(node1);
+    free(node2);
     free(node3);
     free(node4);
-    free(node1);
 
     return 0;
 }
