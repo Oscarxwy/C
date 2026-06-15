@@ -97,6 +97,11 @@ void freeStack(stackNode* top)
     }
 }
 
+unsigned int hashFunction(int value, int capacity)
+{
+    return value % capacity;
+}
+
 HashNode* createHashNode(Node* node)
 {
     HashNode* hNode = (HashNode*)malloc(sizeof(HashNode));
@@ -141,6 +146,32 @@ bool containsInHashSet(HashSet* set, Node* node)
         current = current->next;
     }
     return false;
+}
+
+int hashdelete(HashSet* set, Node* node)
+{
+    int index = node->value % set->capacity;
+    HashNode* current = set->table[index];
+    HashNode* prev = NULL;
+    while (current != NULL)
+    {
+        if (current->node == node)
+        {
+            if (prev == NULL)
+            {
+                set->table[index] = current->next;
+            }
+            else
+            {
+                prev->next = current->next;
+            }
+            free(current);
+            return 1; // Node deleted successfully
+        }
+        prev = current;
+        current = current->next;
+    }
+    return 0; // Node not found
 }
 
 void freeHashSet(HashSet* set)
