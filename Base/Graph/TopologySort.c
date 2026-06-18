@@ -53,6 +53,25 @@ typedef struct NodeList
     struct NodeList* next;
 }NodeList;
 
+Node* createNode(int value);
+Node** createQueue(int capacity);
+bool isQueueEmpty(queueNode* front, queueNode* rear);
+void enqueue(queueNode** rear, Node* node);
+Node* dequeue(queueNode** front, queueNode** rear);
+Node* peek(queueNode* front);
+void freeQueue(queueNode* front);
+HashNode* createHashNode(Node* node);
+HashSet* createHashSet(int capacity);
+void addToHashSet(HashSet* set, Node* node);
+int containsInHashSet(HashSet* set, Node* node);
+int hashdelete(HashSet* set, Node* node);
+void freeHashSet(HashSet* set);
+NodeList* createNodeList(Node* node);
+NodeList* addToNodeList(NodeList* head, Node* node);
+NodeList* reverseNodeList(NodeList* head);
+void freeNodeList(NodeList* head);
+NodeList* topologysort(Graph* graph);
+
 Node* createNode(int value)
 {
     Node* node = (Node*)malloc(sizeof(Node));
